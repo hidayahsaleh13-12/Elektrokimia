@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Lab Penyesaran Logam</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; padding: 15px; background: #f0f2f5; }
+        .container { max-width: 450px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        select, button { width: 100%; padding: 12px; margin-top: 8px; border-radius: 8px; border: 1px solid #ddd; font-size: 15px; }
+        button { background: #2980b9; color: white; border: none; font-weight: bold; margin-top: 15px; cursor: pointer; }
+        
+        /* Box Hasil */
+        #result-display { 
+            margin-top: 20px; padding: 15px; border-radius: 10px; display: none; 
+            border: 2px dashed #bdc3c7; transition: 0.5s;
+        }
+        .label-kecil { font-size: 11px; text-transform: uppercase; color: #7f8c8d; margin-bottom: 3px; }
+        .info-teks { margin-bottom: 12px; font-weight: bold; }
+        .warna-box { display: flex; gap: 10px; margin-top: 10px; }
+        .warna-item { flex: 1; padding: 10px; border-radius: 5px; text-align: center; font-size: 12px; border: 1px solid rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h3 style="text-align:center;">Simulasi Penyesaran</h3>
+    
+    <label>Pilih Logam:</label>
+    <select id="logam">
+        <option value="Mg">Magnesium (Mg)</option>
+        <option value="Zn">Zink (Zn)</option>
+        <option value="Fe">Besi (Fe)</option>
+        <option value="Cu">Kuprum (Cu)</option>
+    </select>
+
+    <label>Pilih Larutan:</label>
+    <select id="larutan">
+        <option value="CuSO4">Kuprum(II) Sulfat (Biru)</option>
+        <option value="FeSO4">Feri Sulfat (Hijau Muda)</option>
+        <option value="MgSO4">Magnesium Sulfat (Tanpa Warna)</option>
+    </select>
+
+    <button onclick="jalankanEksperimen()">MASUKKAN LOGAM</button>
+
+    <div id="result-display">
+        <div class="label-kecil">Persamaan Ion:</div>
+        <div id="persamaan" class="info-teks"></div>
+
+        <div class="label-kecil">Pemerhatian:</div>
+        <div id="pemerhatian" class="info-teks" style="color: #2c3e50;"></div>
+
+        <div class="warna-box">
+            <div id="warna-asal" class="warna-item">Asal</div>
+            <div id="warna-akhir" class="warna-item">Akhir</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Ranking: Mg(4), Zn(3), Fe(2), Cu(1)
+    const ranking = { "Mg": 4, "Zn": 3, "Fe": 2, "Cu": 1 };
+    
+    const dataLarutan = {
+        "CuSO4": { rank: 1, warna: "#3498db", kation: "Cu²⁺", nama: "Kuprum" },
+        "FeSO4": { rank: 2, warna: "#a2d1a4", kation: "Fe²⁺", nama: "Besi" },
+        "MgSO4": { rank: 4, warna: "#ffffff", kation: "Mg
