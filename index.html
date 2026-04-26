@@ -1,40 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makmal Kimia Digital</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; padding: 15px; }
+        .kad { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        h2, h3 { color: #2c3e50; margin-top: 0; }
+        select, button { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid #ccc; font-size: 15px; }
+        button { background: #2980b9; color: white; font-weight: bold; border: none; cursor: pointer; }
+        .hasil { margin-top: 15px; padding: 15px; border-radius: 8px; display: none; border-left: 5px solid #27ae60; background: #f9f9f9; }
+        .warna-pemerhatian { display: inline-block; width: 20px; height: 20px; border: 1px solid #000; vertical-align: middle; }
+    </style>
+</head>
 <body>
-    <h3>Ujian Penyesaran</h3>
-    
-    Logam: 
-    <select id="m">
-        <option value="10">Magnesium (Kuat)</option>
-        <option value="5">Kuprum (Lemah)</option>
-    </select><br>
 
-    Larutan: 
-    <select id="s">
-        <option value="5">Kuprum(II) Sulfat</option>
-        <option value="10">Magnesium Sulfat</option>
-    </select><br>
+    <div class="kad">
+        <h3>1. Peneutralan (Asid + Alkali)</h3>
+        <label>Asid:</label>
+        <select id="asid_p">
+            <option value="HCl">HCl (Asid Hidroklorik)</option>
+            <option value="H2SO4">H₂SO₄ (Asid Sulfurik)</option>
+        </select>
+        <label>Alkali:</label>
+        <select id="alkali_p">
+            <option value="NaOH">NaOH (Natrium Hidroksida)</option>
+            <option value="KOH">KOH (Kalium Hidroksida)</option>
+        </select>
+        <button onclick="kiraPeneutralan()">CAMPUR & ANALISIS ION</button>
+        
+        <div id="res_p" class="hasil">
+            <strong>Persamaan:</strong> <span id="eq_p"></span><br>
+            <strong>Kation (+):</strong> <span id="kat_p"></span><br>
+            <strong>Anion (-):</strong> <span id="ani_p"></span>
+        </div>
+    </div>
 
-    <button onclick="run()">UJI SEKARANG</button>
+    <div class="kad">
+        <h3>2. Penyesaran Logam</h3>
+        <label>Logam:</label>
+        <select id="logam_s">
+            <option value="4">Magnesium (Mg)</option>
+            <option value="1">Kuprum (Cu)</option>
+        </select>
+        <label>Larutan Garam:</label>
+        <select id="larutan_s">
+            <option value="1">Kuprum(II) Sulfat (Biru)</option>
+            <option value="4">Magnesium Sulfat (Bening)</option>
+        </select>
+        <button onclick="kiraPenyesaran()" style="background:#e67e22;">UJI PENYESARAN</button>
 
-    <div id="out" style="margin-top:20px; padding:10px; border:1px solid #ccc; display:none;"></div>
+        <div id="res_s" class="hasil" style="border-left-color: #e67e22;">
+            <div id="teks_s"></div>
+            <div id="warna_visual" style="margin-top:10px;"></div>
+        </div>
+    </div>
 
-    <script>
-        function run() {
-            var metal = parseInt(document.getElementById('m').value);
-            var salt = parseInt(document.getElementById('s').value);
-            var out = document.getElementById('out');
+<script>
+    // FUNGSI PENEUTRALAN
+    function kiraPeneutralan() {
+        const a = document.getElementById('asid_p').value;
+        const b = document.getElementById('alkali_p').value;
+        const res = document.getElementById('res_p');
+        
+        let eq = "", kat = "", ani = "";
 
-            out.style.display = "block";
+        if(a === "HCl" && b === "NaOH") { eq = "HCl + NaOH → NaCl + H₂O"; kat = "Na⁺"; ani = "Cl⁻"; }
+        else if(a === "HCl" && b === "KOH") { eq = "HCl + KOH → KCl + H₂O"; kat = "K⁺"; ani = "Cl⁻"; }
+        else if(a === "H2SO4" && b === "NaOH") { eq = "H₂SO₄ + 2NaOH → Na₂SO₄ + 2H₂O"; kat = "Na⁺"; ani = "SO₄²⁻"; }
+        else if(a === "H2SO4" && b === "KOH") { eq = "H₂SO₄ + 2KOH → K₂SO₄ + 2H₂O"; kat = "K⁺"; ani = "SO₄²⁻"; }
 
-            if (metal > salt) {
-                out.innerHTML = "<b>BERJAYA!</b><br>Persamaan: Mg + Cu²⁺ → Mg²⁺ + Cu<br>Warna: Biru jadi Pudar.";
-                out.style.color = "green";
-            } else {
-                out.innerHTML = "<b>TIADA TINDAK BALAS</b><br>Logam tidak cukup kuat untuk menghalau kation.";
-                out.style.color = "red";
-            }
+        res.style.display = "block";
+        document.getElementById('eq_p').innerText = eq;
+        document.getElementById('kat_p').innerText = kat;
+        document.getElementById('ani_p').innerText = ani;
+    }
+
+    // FUNGSI PENYESARAN
+    function kiraPenyesaran() {
+        const m = parseInt(document.getElementById('logam_s').value);
+        const s = parseInt(document.getElementById('larutan_s').value);
+        const res = document.getElementById('res_s');
+        const teks = document.getElementById('teks_s');
+        const visual = document.getElementById('warna_visual');
+
+        res.style.display = "block";
+
+        if (m > s) {
+            teks.innerHTML = "<b>BERJAYA!</b><br>Logam menyesarkan larutan. <br><i>Pemerhatian:</i> Warna biru larutan memudar (jika Cu) dan mendakan terbentuk.";
+            visual.innerHTML = "Warna: <div class='warna-pemerhatian' style='background:#3498db'></div> → <div class='warna-pemerhatian' style='background:#fff'></div>";
+        } else {
+            teks.innerHTML = "<b>TIADA TINDAK BALAS.</b><br>Logam kurang reaktif.";
+            visual.innerHTML = "";
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
